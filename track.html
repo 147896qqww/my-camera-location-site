@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Camera & Location Permission</title>
+</head>
+<body>
+  <h2>📍 আপনার ক্যামেরা ও লোকেশন অ্যাক্সেসের অনুমতি দিন</h2>
+
+  <video id="video" width="300" height="200" autoplay></video>
+  <p id="location">লোকেশন লোড হচ্ছে...</p>
+
+  <script>
+    // লোকেশন
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        function(position) {
+          document.getElementById("location").textContent =
+            "আপনার লোকেশন: Latitude " +
+            position.coords.latitude +
+            ", Longitude " +
+            position.coords.longitude;
+        },
+        function(error) {
+          document.getElementById("location").textContent = "লোকেশন পাওয়া যায়নি: " + error.message;
+        }
+      );
+    } else {
+      document.getElementById("location").textContent = "আপনার ব্রাউজারে লোকেশন সাপোর্ট নেই।";
+    }
+
+    // ক্যামেরা
+    navigator.mediaDevices
+      .getUserMedia({ video: true })
+      .then(function(stream) {
+        document.getElementById("video").srcObject = stream;
+      })
+      .catch(function(err) {
+        alert("ক্যামেরা চালু করা যায়নি: " + err.message);
+      });
+  </script>
+</body>
+</html>
